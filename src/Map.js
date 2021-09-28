@@ -15,6 +15,7 @@ const Map = () => {
         '5.000 - 10.000',
         '10.000 - 15.000',
         '15.000 +',
+        'Null',
         'No Data'
     ];
     const colors = [
@@ -22,7 +23,8 @@ const Map = () => {
         '#FFCDD2',
         '#EF5350',
         '#B71C1C',
-        'orange'
+        'orange',
+        'black'
     ];
     const matchExpression = ['match', ['string', ['get', 'KABUPATEN']]];
     const bounds = [[90, -15],[145, 10]];
@@ -67,7 +69,7 @@ const Map = () => {
             }
             matchExpression.push(row['location'], color);
         }
-        matchExpression.push(colors[4]); //fallback
+        matchExpression.push(colors[5]); //fallback
 
         const legend = document.getElementById('legend');
         legend.innerHTML = ''; //clear contents
@@ -99,7 +101,7 @@ const Map = () => {
             'source': 'kabupaten', // reference the data source
             'paint': {
                 'fill-color': matchExpression,
-                'fill-opacity': 0.5,
+                'fill-opacity': 0.75,
                 'fill-outline-color': '#ededed'
             }
         });
@@ -110,7 +112,7 @@ const Map = () => {
         const location = e.features[0].properties.KABUPATEN;
         const region = e.features[0].properties.REGION;
         const data = data_download.filter((n)=>n.location===location?n.avg_download_throughput:null);
-        let avg = typeof data[0]!=='undefined'?data[0].avg_download_throughput:'No Data';
+        let avg = typeof data[0]!=='undefined'?data[0].avg_download_throughput:'Null';
         const description =  
         `<h2><strong>${location.toLowerCase()}</strong></h2>
         <h3>${region.toLowerCase()}</h3>

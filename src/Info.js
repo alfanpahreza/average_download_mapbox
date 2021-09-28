@@ -26,7 +26,7 @@ const Info = () =>{
             defaultSortOrder: 'descend',
             width:'20%',
             sorter: (a, b) => a.avg_download_throughput - b.avg_download_throughput,
-            render: (value) => value.toFixed(2)
+            render: (value) => value.toLocaleString('id-ID',{maximumFractionDigits: 2})
         }
     ];
 
