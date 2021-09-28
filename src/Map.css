@@ -40,10 +40,10 @@ p {
 #legend {
   padding: 10px;
   line-height: 18px;
-  height: 100px;
-  right: 50px;
+  height: 150px;
+  left: 50px;
   top : 70px;
-  width: 150px;
+  width: 200px;
 }
 
 .legend-key {
@@ -52,20 +52,6 @@ p {
   width: 10px;
   height: 10px;
   margin-right: 5px;
-}
-
-
-.sidebar {
-  background-color: white;
-  color: black;
-  padding: 6px 12px;
-  font-family: Arial, sans-serif;
-  z-index: 1;
-  position: absolute;
-  top: 70px;
-  margin: 12px;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .mapboxgl-popup {

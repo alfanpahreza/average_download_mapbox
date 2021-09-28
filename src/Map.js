@@ -5,20 +5,17 @@ import data_kabupaten from './data/kabupaten.geojson';
 import './Map.css';
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWxmYW5wayIsImEiOiJja3Q3dzk3d3cwd2Z4MnBvN2VoNjl5dHloIn0.9Io9o4cQ6EZKiphh8Kjybw';
 
-
-mapboxgl.accessToken =
-  'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
-
 const Map = () => {
     const mapContainer = useRef(null);
     const [lng, setLng] = useState(116.1872); //x axis
     const [lat, setLat] = useState(-1.4611); //y axis
     const [zoom, setZoom] = useState(4.16); //zoom
     const layers = [
-        '0-5,000',
-        '5,000-10,000',
-        '10,000-15,000',
-        '15,000+',
+        '0 - 5.000',
+        '5.000 - 10.000',
+        '10.000 - 15.000',
+        '15.000 +',
+        'No Data'
     ];
     const colors = [
         '#FFEBEE',
@@ -44,7 +41,11 @@ const Map = () => {
         closeButton: false,
         closeOnClick: false
     });
-    
+
+    // Add navigation control (the +/- zoom buttons)
+    map.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
+    map.addControl(new mapboxgl.FullscreenControl({container: document.querySelector('map-body')}));
+
     map.on('move', () => {
       setLng(map.getCenter().lng.toFixed(4));
       setLat(map.getCenter().lat.toFixed(4));
@@ -68,8 +69,9 @@ const Map = () => {
         }
         matchExpression.push(colors[4]); //fallback
 
-        // create legend
         const legend = document.getElementById('legend');
+        legend.innerHTML = ''; //clear contents
+        legend.innerHTML = "<strong>Average Download per Daerah</strong>";
         layers.forEach((layer, i) => {
             const color = colors[i];
             const item = document.createElement('div');
@@ -97,8 +99,8 @@ const Map = () => {
             'source': 'kabupaten', // reference the data source
             'paint': {
                 'fill-color': matchExpression,
-                'fill-opacity': 0.8,
-                'fill-outline-color': '#000'
+                'fill-opacity': 0.5,
+                'fill-outline-color': '#ededed'
             }
         });
     });
@@ -131,14 +133,10 @@ const Map = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div>
-        <div className="sidebar">
-            Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-        </div>
+    <div id='map-body'>
         <div ref={mapContainer} id='map'></div>
         <div className='map-overlay' id='legend'></div>
     </div>
   );
 };
-
 export default Map;
