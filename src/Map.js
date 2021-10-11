@@ -38,6 +38,7 @@ const Map = () => {
         zoom: zoom,
         maxBounds:bounds,
     });
+    let hoveredStateId = null;
 
     const popup = new mapboxgl.Popup({
         closeButton: false,
@@ -101,12 +102,43 @@ const Map = () => {
             'source': 'kabupaten', // reference the data source
             'paint': {
                 'fill-color': matchExpression,
-                'fill-opacity': 0.75,
+                'fill-opacity': [
+                    'case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    1,
+                    0.5
+                    ],
                 'fill-outline-color': '#ededed'
             }
-        });
+        },'waterway-label');
     });
 
+    map.on('mousemove', 'state-fills', (e) => {
+    if (e.features.length > 0) {
+        if (hoveredStateId !== null) {
+            map.setFeatureState(
+                { source: 'states', id: hoveredStateId },
+                { hover: false }
+            );
+        }
+        hoveredStateId = e.features[0].id;
+        map.setFeatureState(
+            { source: 'states', id: hoveredStateId },
+            { hover: true }
+        );
+    }
+    });
+
+    map.on('mouseleave', 'state-fills', ()=>{
+        if (hoveredStateId !== null) {
+            map.setFeatureState(
+                { source: 'states', id: hoveredStateId },
+                { hover: false }
+            );
+        }
+        hoveredStateId = null;
+    });
+    
     map.on('mousemove', 'location', (e) => {
         map.getCanvas().style.cursor = 'pointer';
         const location = e.features[0].properties.KABUPATEN;
